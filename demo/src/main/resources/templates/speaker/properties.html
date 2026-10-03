@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Properties | Speaker</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+
+<body>
+    <div th:replace="~{fragments/layout :: header('SPEAKER')}"></div>
+
+    <div class="container">
+        <div class="page-title-row">
+            <span class="page-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M4 21V7l8-4 8 4v14" />
+                    <path d="M9 21v-6h6v6" />
+                    <path d="M9 9h.01M15 9h.01M9 13h.01M15 13h.01" />
+                </svg>
+            </span>
+            <h1 class="page-title">Apply for a Property</h1>
+        </div>
+        <p class="page-subtitle">Choose an event and a property to submit your application</p>
+
+        <div class="card">
+            <form method="post" th:action="@{/speaker/properties/apply}">
+                <div class="form-grid">
+                    <div>
+                        <label>Event</label>
+                        <select name="eventId" required>
+                            <option th:each="e : ${events}" th:value="${e.id}" th:text="${e.title}"></option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Property</label>
+                        <select name="propertyId" required>
+                            <option th:each="p : ${properties}" th:value="${p.id}" th:text="${p.propertyName}"></option>
+                        </select>
+                    </div>
+                    <div>
+                        <button type="submit" class="btn btn-primary btn-block">Apply</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="card">
+            <h3>All Properties</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Location</th>
+                        <th>Capacity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="p : ${properties}">
+                        <td th:text="${p.propertyName}"></td>
+                        <td th:text="${p.location}"></td>
+                        <td th:text="${p.capacity}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script th:src="@{/js/script.js}"></script>
+</body>
+
+</html>

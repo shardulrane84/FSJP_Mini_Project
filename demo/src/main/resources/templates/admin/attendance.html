@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Attendance Scanner | Admin</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+</head>
+
+<body>
+    <div th:replace="~{fragments/layout :: header('ADMIN')}"></div>
+
+    <div class="container">
+        <div class="page-title-row">
+            <span class="page-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+                    <circle cx="12" cy="13" r="4" />
+                </svg>
+            </span>
+            <h1 class="page-title">Attendance Scanner</h1>
+        </div>
+        <p class="page-subtitle">Scan a student's ticket QR code to mark them present</p>
+
+        <div class="card">
+            <div id="qr-reader" style="width: 320px;"></div>
+            <p id="scan-result" style="margin-top:16px; font-weight:600;"></p>
+        </div>
+
+        <div class="card">
+            <h3>Manual Entry (if camera unavailable)</h3>
+            <div class="form-grid">
+                <div>
+                    <label>Ticket Code</label>
+                    <input type="text" id="manualCode" placeholder="Paste ticket code" />
+                </div>
+                <div>
+                    <button type="button" class="btn btn-primary btn-block"
+                        onclick="submitCode(document.getElementById('manualCode').value)">Mark Attendance</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script th:src="@{/js/script.js}"></script>
+    <script th:inline="javascript">
+        const csrfDisabled = true;
+        let lastScanned = "";
+
+        function submitCode(code) {
+            if (!code) return;
+            const resultEl = document.getElementById("scan-result");
+            resultEl.style.color = "black";
+            resultEl.innerText = "Checking...";
+
+            fetch("/admin/attendance/mark", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: "ticketCode=" + encodeURIComponent(code)
+            })
+                .then(res => res.text())
+                .then(text => {
+                    resultEl.innerText = text;
+                    resultEl.style.color = text.startsWith("OK") ? "green" : "red";
+                })
+                .catch(() => {
+                    resultEl.innerText = "Network error while marking attendance.";
+                    resultEl.style.color = "red";
+                });
+        }
+
+        const html5QrCode = new Html5Qrcode("qr-reader");
+        html5QrCode.start(
+            { facingMode: "environment" },
+            { fps: 10, qrbox: 220 },
+            (decodedText) => {
+                if (decodedText !== lastScanned) {
+                    lastScanned = decodedText;
+                    submitCode(decodedText);
+                    setTimeout(() => { lastScanned = ""; }, 3000);
+                }
+            },
+            (errorMessage) => { /* ignore per-frame scan failures */ }
+        ).catch(err => {
+            document.getElementById("scan-result").innerText =
+                "Camera access failed: " + err;
+        });
+    </script>
+</body>
+
+</html>

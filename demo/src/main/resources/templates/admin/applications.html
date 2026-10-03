@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Applications | Admin</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+
+<body>
+    <div th:replace="~{fragments/layout :: header('ADMIN')}"></div>
+
+    <div class="container">
+        <div class="page-title-row">
+            <span class="page-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <rect x="6" y="4" width="12" height="16" rx="2" />
+                    <path d="M9 4V3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1" />
+                    <path d="M9 11h6M9 15h4" />
+                </svg>
+            </span>
+            <h1 class="page-title">Property Applications</h1>
+        </div>
+        <p class="page-subtitle">Review speaker requests for properties</p>
+
+        <div class="card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Speaker</th>
+                        <th>Property</th>
+                        <th>Event</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="a : ${applications}">
+                        <td th:text="${a.speaker.name}"></td>
+                        <td th:text="${a.property.propertyName}"></td>
+                        <td th:text="${a.event.title}"></td>
+                        <td><span th:class="'badge badge-' + ${a.status}" th:text="${a.status}"></span></td>
+                        <td class="actions-cell">
+                            <form method="post" th:action="@{/admin/applications/approve/{id}(id=${a.id})}"
+                                th:if="${a.status.name() == 'PENDING'}">
+                                <button type="submit" class="btn btn-success btn-sm">Approve</button>
+                            </form>
+                            <form method="post" th:action="@{/admin/applications/reject/{id}(id=${a.id})}"
+                                th:if="${a.status.name() == 'PENDING'}">
+                                <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <p class="empty-state" th:if="${#lists.isEmpty(applications)}">No applications submitted yet.</p>
+        </div>
+    </div>
+    <script th:src="@{/js/script.js}"></script>
+</body>
+
+</html>

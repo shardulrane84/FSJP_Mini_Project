@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Attendance | Speaker</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+
+<body>
+    <div th:replace="~{fragments/layout :: header('SPEAKER')}"></div>
+
+    <div class="container">
+        <div class="page-title-row">
+            <span class="page-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+                    <circle cx="12" cy="13" r="4" />
+                </svg>
+            </span>
+            <h1 class="page-title" th:text="'Attendance — ' + ${event.title}"></h1>
+        </div>
+        <p class="page-subtitle" th:text="${event.eventDate}"></p>
+
+        <div class="card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Student</th>
+                        <th>Attendance</th>
+                        <th>Checked In At</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="r : ${registrations}">
+                        <td th:text="${r.student.name}"></td>
+                        <td>
+                            <span th:if="${r.attended}" class="badge badge-APPROVED">Present</span>
+                            <span th:unless="${r.attended}" class="badge badge-PENDING">Absent</span>
+                        </td>
+                        <td th:text="${r.attendedAt} ?: '-'"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <p class="empty-state" th:if="${#lists.isEmpty(registrations)}">No students registered for this event yet.
+            </p>
+        </div>
+        <a href="/speaker/applications">Back</a>
+    </div>
+    <script th:src="@{/js/script.js}"></script>
+</body>
+
+</html>

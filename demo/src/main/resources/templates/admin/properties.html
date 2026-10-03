@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Properties | Admin</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+
+<body>
+    <div th:replace="~{fragments/layout :: header('ADMIN')}"></div>
+
+    <div class="container">
+        <div class="page-title-row">
+            <span class="page-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M4 21V7l8-4 8 4v14" />
+                    <path d="M9 21v-6h6v6" />
+                    <path d="M9 9h.01M15 9h.01M9 13h.01M15 13h.01" />
+                </svg>
+            </span>
+            <h1 class="page-title">Properties</h1>
+        </div>
+        <p class="page-subtitle">Add and manage venue properties</p>
+        <p class="alert alert-error" th:if="${error}" th:text="${error}"></p>
+
+        <div class="card">
+            <h3>Add Property</h3>
+            <form method="post" th:action="@{/admin/properties/create}" th:object="${newProperty}">
+                <div class="form-grid">
+                    <div>
+                        <label>Property Name</label>
+                        <input type="text" th:field="*{propertyName}" placeholder="Main Auditorium" required />
+                    </div>
+                    <div>
+                        <label>Location</label>
+                        <input type="text" th:field="*{location}" placeholder="Building A, Floor 2" />
+                    </div>
+                    <div>
+                        <label>Capacity</label>
+                        <input type="number" th:field="*{capacity}" placeholder="150" />
+                    </div>
+                    <div>
+                        <label>Description</label>
+                        <textarea th:field="*{description}" placeholder="Details about the property"></textarea>
+                    </div>
+                    <div>
+                        <button type="submit" class="btn btn-primary btn-block">Add Property</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="card">
+            <h3>Existing Properties</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Location</th>
+                        <th>Capacity</th>
+                        <th>Available</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="p : ${properties}">
+                        <td th:text="${p.propertyName}"></td>
+                        <td th:text="${p.location}"></td>
+                        <td th:text="${p.capacity}"></td>
+                        <td th:text="${p.available}"></td>
+                        <td class="actions-cell">
+                            <a th:href="@{/admin/properties/edit/{id}(id=${p.id})}" class="btn btn-sm">Edit</a>
+                            <form method="post" th:action="@{/admin/properties/delete/{id}(id=${p.id})}"
+                                data-confirm="Delete this property?">
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <p class="empty-state" th:if="${#lists.isEmpty(properties)}">No properties added yet.</p>
+        </div>
+    </div>
+    <script th:src="@{/js/script.js}"></script>
+</body>
+
+</html>

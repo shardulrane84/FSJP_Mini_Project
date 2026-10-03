@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Events | Admin</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+
+<body>
+    <div th:replace="~{fragments/layout :: header('ADMIN')}"></div>
+
+    <div class="container">
+        <div class="page-title-row">
+            <span class="page-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <rect x="3" y="5" width="18" height="16" rx="2" />
+                    <path d="M16 3v4M8 3v4M3 10h18" />
+                </svg>
+            </span>
+            <h1 class="page-title">Events</h1>
+        </div>
+        <p class="page-subtitle">Create and manage seminars/events</p>
+
+        <div class="card">
+            <h3>Create Event</h3>
+            <form method="post" th:action="@{/admin/events/create}" th:object="${newEvent}">
+                <div class="form-grid">
+                    <div>
+                        <label>Title</label>
+                        <input type="text" th:field="*{title}" placeholder="AI in Healthcare" required />
+                        <span th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="error"></span>
+                    </div>
+                    <div>
+                        <label>Date</label>
+                        <input type="date" th:field="*{eventDate}" required />
+                        <span th:if="${#fields.hasErrors('eventDate')}" th:errors="*{eventDate}" class="error"></span>
+                    </div>
+                    <div>
+                        <label>Start Time</label>
+                        <input type="time" th:field="*{startTime}" required />
+                        <span th:if="${#fields.hasErrors('startTime')}" th:errors="*{startTime}" class="error"></span>
+                    </div>
+                    <div>
+                        <label>End Time</label>
+                        <input type="time" th:field="*{endTime}" required />
+                        <span th:if="${#fields.hasErrors('endTime')}" th:errors="*{endTime}" class="error"></span>
+                    </div>
+                    <div>
+                        <label>Description</label>
+                        <textarea th:field="*{description}" placeholder="What's this event about?"></textarea>
+                    </div>
+                    <div>
+                        <button type="submit" class="btn btn-primary btn-block">Create Event</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="card">
+            <h3>All Events</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="e : ${events}">
+                        <td th:text="${e.title}"></td>
+                        <td th:text="${e.eventDate}"></td>
+                        <td th:text="${e.startTime} + ' - ' + ${e.endTime}"></td>
+                        <td><span th:class="'badge badge-' + ${e.status}" th:text="${e.status}"></span></td>
+                        <td class="actions-cell">
+                            <form method="post" th:action="@{/admin/events/cancel/{id}(id=${e.id})}"
+                                data-confirm="Cancel this event?" th:if="${e.status.name() == 'SCHEDULED'}">
+                                <button type="submit" class="btn btn-danger btn-sm">Cancel</button>
+                            </form>
+                            <a th:href="@{/admin/events/{id}/attendance(id=${e.id})}" class="btn btn-sm">Attendance</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <p class="empty-state" th:if="${#lists.isEmpty(events)}">No events created yet.</p>
+        </div>
+    </div>
+    <script th:src="@{/js/script.js}"></script>
+</body>
+
+</html>

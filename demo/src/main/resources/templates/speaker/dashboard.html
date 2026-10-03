@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Speaker Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+
+<body>
+    <div th:replace="~{fragments/layout :: header('SPEAKER')}"></div>
+
+    <div class="container">
+        <div class="hero-banner"
+            style="background-image:url('https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=1400&q=80');">
+            <div class="hero-content">
+                <h1 class="page-title">Speaker Dashboard</h1>
+                <p class="page-subtitle">Apply for properties and track your events</p>
+            </div>
+        </div>
+
+        <div class="grid-links">
+            <a class="tile" href="/speaker/properties">
+                <span class="tile-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M4 21V7l8-4 8 4v14" />
+                        <path d="M9 21v-6h6v6" />
+                        <path d="M9 9h.01M15 9h.01M9 13h.01M15 13h.01" />
+                    </svg>
+                </span>
+                View Properties & Apply
+            </a>
+            <a class="tile" href="/speaker/applications">
+                <span class="tile-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <rect x="6" y="4" width="12" height="16" rx="2" />
+                        <path d="M9 4V3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1" />
+                        <path d="M9 11h6M9 15h4" />
+                    </svg>
+                </span>
+                My Applications
+            </a>
+        </div>
+    </div>
+    <script th:src="@{/js/script.js}"></script>
+</body>
+
+</html>

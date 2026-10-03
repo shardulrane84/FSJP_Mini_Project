@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Student Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+
+<body>
+    <div th:replace="~{fragments/layout :: header('STUDENT')}"></div>
+
+    <div class="container">
+        <div class="hero-banner"
+            style="background-image:url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1400&q=80');">
+            <div class="hero-content">
+                <h1 class="page-title">Student Dashboard</h1>
+                <p class="page-subtitle">Browse events and manage your registrations</p>
+            </div>
+        </div>
+
+        <div class="grid-links">
+            <a class="tile" href="/student/events">
+                <span class="tile-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <rect x="3" y="5" width="18" height="16" rx="2" />
+                        <path d="M16 3v4M8 3v4M3 10h18" />
+                    </svg>
+                </span>
+                View Events
+            </a>
+            <a class="tile" href="/student/registrations">
+                <span class="tile-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path
+                            d="M3 8a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-2a2 2 0 0 0 0-4z" />
+                        <path d="M9 6v12" stroke-dasharray="3 3" />
+                    </svg>
+                </span>
+                My Registrations
+            </a>
+        </div>
+    </div>
+    <script th:src="@{/js/script.js}"></script>
+</body>
+
+</html>

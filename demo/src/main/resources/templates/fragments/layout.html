@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+
+<body>
+    <div th:fragment="header(role)" class="navbar">
+        <div class="brand">Event<span>Manage</span></div>
+        <nav th:if="${role == 'ADMIN'}">
+            <a href="/admin/dashboard">Dashboard</a>
+            <a href="/admin/users">Users</a>
+            <a href="/admin/properties">Properties</a>
+            <a href="/admin/applications">Applications</a>
+            <a href="/admin/events">Events</a>
+            <a href="/admin/attendance">Attendance</a>
+        </nav>
+        <nav th:if="${role == 'SPEAKER'}">
+            <a href="/speaker/dashboard">Dashboard</a>
+            <a href="/speaker/properties">Properties</a>
+            <a href="/speaker/applications">My Applications</a>
+        </nav>
+        <nav th:if="${role == 'STUDENT'}">
+            <a href="/student/dashboard">Dashboard</a>
+            <a href="/student/events">Events</a>
+            <a href="/student/registrations">My Registrations</a>
+        </nav>
+        <form method="post" th:action="@{/logout}">
+            <button type="submit" class="logout-btn">Logout</button>
+        </form>
+    </div>
+</body>
+
+</html>
